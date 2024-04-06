@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const LeafletMap = ({ lat, lng }) => {
+const LeafletMap = ({ lat, lng, density }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -20,8 +20,8 @@ const LeafletMap = ({ lat, lng }) => {
 
 
     L.circle([lat, lng], {
-        color: 'red',      // Color of the circle outline
-        fillColor: '#f03', // Fill color of the circle
+        color: density,      // Color of the circle outline
+        fillColor: density, // Fill color of the circle
         fillOpacity: 0.5,  // Opacity of the circle fill
         radius: 40        // Radius of the circle in meters
       }).addTo(map);
@@ -29,7 +29,7 @@ const LeafletMap = ({ lat, lng }) => {
     return () => {
       map.remove();
     };
-  }, [lat, lng]); // Recreate the map when coordinates change
+  }, [lat, lng, density]); // Recreate the map when coordinates change
 
   return <div ref={mapRef} style={{ height: '400px', width: '100%' }} />;
 };

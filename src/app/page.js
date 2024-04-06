@@ -2,13 +2,19 @@
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import LeafletMap from './components/LeafletMap';
+import DensityModal from './components/DensityModal';
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34.6416826, lng: -58.4067763 });
+  const [density, setDensity] = useState('');
+  const [modalOpen, setModalOpen] = useState(false); // State to control modal visibility
+
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
+      setModalOpen(true); // Open the modal once the location is obtained
+
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
@@ -36,10 +42,21 @@ export default function Home() {
     }
   }
 
+  const handleDensitySubmit = (selectedDensity) => {
+    setDensity(selectedDensity);
+    setModalOpen(false); // Close the modal after submission
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <LeafletMap lat={userLocation.lat} lng={userLocation.lng} />
+        <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} />
+        {modalOpen && (
+        <DensityModal 
+          onClose={() => setModalOpen(false)} 
+          onSubmit={handleDensitySubmit} 
+        />
+      )}
       </div>
     </main>
   );
