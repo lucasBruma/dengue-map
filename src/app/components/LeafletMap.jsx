@@ -14,7 +14,7 @@ const LeafletMap = ({ lat, lng, density }) => {
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
+      maxZoom: 15,
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 

@@ -6,14 +6,14 @@ import DensityModal from './components/DensityModal';
 import clsx from "clsx";
 
 export default function Home() {
-  const [userLocation, setUserLocation] = useState({ lat: -34.6416826, lng: -58.4067763 });
+  const [userLocation, setUserLocation] = useState({ lat: 34, lng: 58});
   const [density, setDensity] = useState('');
   const [modalOpen, setModalOpen] = useState(false); // State to control modal visibility
 
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, showError);
+      navigator.geolocation.getCurrentPosition(setPosition, showError);
       setModalOpen(true); // Open the modal once the location is obtained
 
     } else {
@@ -21,7 +21,8 @@ export default function Home() {
     }
   }, []);
 
-  const showPosition = (position) => {
+  const setPosition = (position) => {
+    setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
     console.log("Latitude: " + position.coords.latitude + 
     " Longitude: " + position.coords.longitude);
   }
