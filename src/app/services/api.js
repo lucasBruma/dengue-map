@@ -1,10 +1,28 @@
 
+const result = [
+    {
+        "lat": -34.323232323,
+        "long": -58.2132313,
+        "intensity": 0,
+    },
+    {
+        "lat": -34.423232323,
+        "long": -58.2132313,
+        "intensity": 2,
+    },
+    {
+        "lat": -34.323232323,
+        "long": -58.3132313,
+        "intensity": 1,
+    },
+    {
+        "lat": -34.423232323,
+        "long": -58.3132313,
+        "intensity": 2,
+    },
+]
 
-const result = {
-    "lat": -34.323232323,
-    "long": -58.2132313,
-    "intensity": 2,
-}
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // intensity 0 = amarillo, 1 = naranja, 2 = rojo
 
@@ -13,14 +31,14 @@ const result = {
 export class ApiClient {
   // necesito puntos izq-top, der-top, izq-bottom, der-bottom
   async getPointsInAnSquare({ leftTop, rightTop, leftBottom, rightBottom }) {
-    console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
-    await timeout(500);
+    // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
+    await delay(500);
     return { success: true, value: result };
   }
 
   async saveReport({lat, lng, density}) {
-    console.log('saveReport: ', lat, lng, density);
-    await timeout(500);
+    // console.log('saveReport: ', lat, lng, density);
+    await delay(500);
     return { success: true };
   }
 
