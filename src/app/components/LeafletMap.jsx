@@ -9,7 +9,7 @@ const LeafletMap = ({ lat, lng, density }) => {
     if (mapRef.current === null) return;
 
     // Initialize the map
-    const map = L.map(mapRef.current).setView([lat, lng], 13);
+    const map = L.map(mapRef.current).setView([-34.617387052407175, -58.47473144531251], 13);
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -18,12 +18,12 @@ const LeafletMap = ({ lat, lng, density }) => {
     }).addTo(map);
 
 
-    L.circle([lat, lng], {
-        color: density,      // Color of the circle outline
-        fillColor: density, // Fill color of the circle
-        fillOpacity: 0.5,  // Opacity of the circle fill
-        radius: 40        // Radius of the circle in meters
-      }).addTo(map);
+    // L.circle([lat, lng], {
+    //     color: density,      // Color of the circle outline
+    //     fillColor: density, // Fill color of the circle
+    //     fillOpacity: 0.5,  // Opacity of the circle fill
+    //     radius: 40        // Radius of the circle in meters
+    //   }).addTo(map);
 
     map.on('click', (event) => {
       const { lat, lng } = event.latlng;
