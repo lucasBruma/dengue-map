@@ -15,7 +15,6 @@ export default function Home() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(setPosition, showError);
       setModalOpen(true); // Open the modal once the location is obtained
-
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
@@ -50,11 +49,11 @@ export default function Home() {
   };
 
   return (
-    <main className={clsx('relative flex min-h-screen flex-col items-center justify-center p-24')}>
-      <div className={clsx('flex-col items-center justify-center p-24 w-full', 
+    <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
+      <div className={clsx('flex-col items-center justify-center w-full', 
         modalOpen && 'bg-black opacity-70' 
       )}>
-        <div className="z-10 max-w-5xl w-full items-center justify-center font-mono text-sm lg:flex">
+        <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
           <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} />
         </div>
       </div>

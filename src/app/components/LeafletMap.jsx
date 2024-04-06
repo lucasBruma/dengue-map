@@ -30,8 +30,10 @@ const LeafletMap = ({ lat, lng, density }) => {
       map.remove();
     };
   }, [lat, lng, density]); // Recreate the map when coordinates change
+  
 
-  return <div ref={mapRef} style={{ height: '400px', width: '100%' }} />;
+
+  return <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />;
 };
 
 export default LeafletMap;
