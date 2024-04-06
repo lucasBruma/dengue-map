@@ -28,15 +28,13 @@ const circleOptions = {
     zIndex: 1
 };
 
-const MapComponent = ({isEditing}) => {
+const MapComponent = ({isEditing, density, marker, setMarker}) => {
+  const [map, setMap] = React.useState(null);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });
-
-  const [map, setMap] = React.useState(null)
-
 
   const onLoad = React.useCallback(function callback(map) {
     // This is just an example of getting and using the map instance!!! don't just blindly copy!
@@ -46,9 +44,6 @@ const MapComponent = ({isEditing}) => {
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
   }, [])
-
-
-  const [marker, setMarker] = React.useState(null);
 
   const onMapClick = (e) => {
     console.log(isEditing)
