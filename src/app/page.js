@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import LeafletMap from './components/LeafletMap';
 import DensityModal from './components/DensityModal';
+import clsx from "clsx";
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34.6416826, lng: -58.4067763 });
@@ -48,16 +49,20 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} />
-        {modalOpen && (
+    <main className={clsx('relative flex min-h-screen flex-col items-center justify-center p-24')}>
+      <div className={clsx('flex-col items-center justify-center p-24 w-full', 
+        modalOpen && 'bg-black opacity-70' 
+      )}>
+        <div className="z-10 max-w-5xl w-full items-center justify-center font-mono text-sm lg:flex">
+          <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} />
+        </div>
+      </div>
+    {modalOpen && (
         <DensityModal 
           onClose={() => setModalOpen(false)} 
           onSubmit={handleDensitySubmit} 
         />
       )}
-      </div>
     </main>
   );
 }

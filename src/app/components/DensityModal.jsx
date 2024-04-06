@@ -12,7 +12,7 @@ const DensityModal = ({ onClose, onSubmit }) => {
   };
 
   return (
-    <div className="bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="absolute z-[1000] bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-4 rounded-lg text-black">
         <form onSubmit={handleSubmit}>
           <h2 className="text-lg mb-4">¿Que nivel de mosquitos encontras?</h2>
