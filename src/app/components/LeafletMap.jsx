@@ -25,9 +25,17 @@ const LeafletMap = ({ lat, lng, density }) => {
         radius: 40        // Radius of the circle in meters
       }).addTo(map);
 
-    return () => {
-      map.remove();
-    };
+    map.on('click', (event) => {
+      const { lat, lng } = event.latlng;
+      console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+      // You can perform further actions with these coordinates,
+      // such as updating state, creating markers, or sending them to an API.
+    });
+
+      return () => {
+        map.off('mousemove');
+        map.remove();
+      };
   }, [lat, lng, density]); // Recreate the map when coordinates change
   
 
