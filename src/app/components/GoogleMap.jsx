@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { apiClient } from '../services/api';
 
@@ -30,6 +30,8 @@ const circleOptions = {
 
 const MapComponent = ({isEditing, density, marker, setMarker}) => {
   const [map, setMap] = React.useState(null);
+  const timerIdRef = useRef(null);
+  const [isPollingEnabled, setIsPollingEnabled] = useState(true);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -76,6 +78,41 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
 
     loadCircles();
   }, [isLoaded, map, circleOptions]);
+
+  useEffect(() => {
+    const pollingCallback = () => {
+        // Your polling logic here
+      console.log('Polling...');
+
+        // Simulating an API failure in the polling callback
+        //   const shouldFail = Math.random() < 0.2; // Simulate 20% chance of API failure
+
+        //   if (shouldFail) {
+        //     setIsPollingEnabled(false);
+        //     console.log('Polling failed. Stopped polling.');
+        //   }
+    };
+
+    const startPolling = () => {
+      pollingCallback(); // To immediately start fetching data
+      // Polling every 30 seconds
+      timerIdRef.current = setInterval(pollingCallback, 30000);
+    };
+
+    const stopPolling = () => {
+      clearInterval(timerIdRef.current);
+    };
+
+    if (isPollingEnabled && map) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+
+    return () => {
+      stopPolling();
+    };
+  }, [isPollingEnabled, map]);
 
   const getCenterAndRenderCircles = () => {
     if (!map) return;
