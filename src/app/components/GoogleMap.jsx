@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { GoogleMap, Marker, useJsApiLoader, Circle } from '@react-google-maps/api';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { apiClient } from '../services/api';
 
 const containerStyle = {
@@ -46,14 +46,12 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
   }, [])
 
   const onMapClick = (e) => {
-    console.log(isEditing)
     if (!isEditing) return;
 
     setMarker({
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
     });
-    // console.log(`Latitude: ${e.latLng.lat()}, Longitude: ${e.latLng.lng()}`);
   };
 
   useEffect(() => {
@@ -79,6 +77,47 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     loadCircles();
   }, [isLoaded, map, circleOptions]);
 
+  const getCenterAndRenderCircles = () => {
+    if (!map) return;
+
+    const newCenter = map.getCenter();
+
+    async function loadCircles() {
+        const circlesResult = await apiClient.getPointsInAnSquare() // pasar el newCenter
+        for (const circle of circlesResult.value) {
+            const circleRendered = new window.google.maps.Circle({
+              strokeColor: "#FF0000",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#FF0000",
+              fillOpacity: 0.35,
+              map,
+              center: {lat: circle.lat, lng: circle.long},
+              radius: 100,
+              ...circleOptions
+            });
+          }
+    }
+
+    loadCircles();
+  }
+
+
+  const handleDrag = () => { // pasarle a la query el punto del medio y la distancia del zoom (a revisar)
+    console.log('The user is dragging the map.');
+    getCenterAndRenderCircles();
+  };
+
+  const handleDragEnd = () => {
+    console.log('The user stopped dragging the map.');
+    getCenterAndRenderCircles();
+  };
+
+  const handleZoomChanged = () => {
+    console.log('The user has changed the zoom.');
+    getCenterAndRenderCircles();
+  };
+
   return isLoaded ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -86,11 +125,14 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
         zoom={13}
         onClick={onMapClick} // Set up the click event listener here
         onLoad={onLoad}
-        onUnmount={onUnmount}        
+        onUnmount={onUnmount}
+        onDrag={handleDrag} 
+        onDragEnd={handleDragEnd}
+        onZoomChanged={handleZoomChanged}       
       >
         {marker && <Marker position={marker} />}
       </GoogleMap>
   ) : <></>;
 };
 
-export default React.memo(MapComponent);
+export default React.memo(MapComponent); // chequear esto
