@@ -26,8 +26,6 @@ export default function Home() {
 
   const setPosition = (position) => {
     setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-    console.log("Latitude: " + position.coords.latitude + 
-    " Longitude: " + position.coords.longitude);
   }
 
   const showError = (error) => {
