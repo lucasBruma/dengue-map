@@ -1,4 +1,4 @@
-### WELCOME TO DENGUE MAP!
+## WELCOME TO DENGUE MAP!
 DENGUE MAP is a simple and intuitive website that aims to help in the prevention of dengue and other potential diseases.
 
 ### How to use it
