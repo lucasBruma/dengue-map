@@ -2,20 +2,19 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 
-const DensityModal = ({ onSubmit }) => {
-  const [density, setDensity] = useState('');
+const DensityModal = ({ setDensity, density }) => {
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(density);
-// aca mandaríamos la info a la db (latitud, longitud y densidad de mosquitos)
-  };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     setDensity(density);
+//   };
 
   return (
     <div className="absolute w-full bottom-0 z-[1000] flex justify-center items-center">
       <div className="bg-white p-4 rounded-lg text-black w-full">
-        <form onSubmit={handleSubmit}>
-          <h2 className="text-lg mb-4">¿Que nivel de mosquitos encontras?</h2>
+        {/* <form onSubmit={handleSubmit}> */}
+        <div>
+        <h2 className="text-lg mb-4">¿Que nivel de mosquitos encontras?</h2>
           <div className="flex gap-3 flex-row items-start w-full">
             <button type='button' onClick={()=>setDensity("red")} className={clsx(
                 density == "red" && "outline outline-black outline-2",
@@ -30,11 +29,11 @@ const DensityModal = ({ onSubmit }) => {
                 "hover:outline hover:outline-2 hover:outline-black p-3 rounded-md w-full text-start bg-yellow-500 text-white"
             )}>🟡 Amarillo! Cuidado</button>
           </div>
-          <br />
-          {/* <button type="submit" className="mr-2 px-4 py-2 bg-blue-500 text-white rounded">
+        </div>
+        {/* <button type="submit" className="mr-2 px-4 py-2 bg-blue-500 text-white rounded">
             Enviar
           </button> */}
-        </form>
+        {/* </form> */}
       </div>
     </div>
   );

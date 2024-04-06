@@ -5,6 +5,7 @@ import DensityModal from './components/DensityModal';
 import clsx from "clsx";
 import dynamic from 'next/dynamic';
 import EditButton from "./components/EditButton";
+import SubmitReportButton from './components/SubmitReportButton';
 
 const LeafletMap = dynamic(() => import('./components/LeafletMap.jsx'), {
   ssr: false,
@@ -12,9 +13,9 @@ const LeafletMap = dynamic(() => import('./components/LeafletMap.jsx'), {
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34, lng: -58});
-  const [density, setDensity] = useState('');
-  const [densityModalOpen, setDensityModalOpen] = useState(true);  // deberiamos abrir este modal cuando se elija la opcion de editar
+  const [density, setDensity] = useState('red');
   const [isEditing, setIsEditing] = useState(false);
+  const [circleAdded, setCircleAdded] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -43,23 +44,22 @@ export default function Home() {
     }
   }
 
-  const handleDensitySubmit = (selectedDensity) => {
-    setDensity(selectedDensity);
-    setDensityModalOpen(false); // Close the modal after submission
-  };
-
   return (
     <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
       <div className={clsx('flex-col items-center justify-center w-full')}>
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
-          <LeafletMap density={density} />
+          <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} isEditing={isEditing} circleAdded={circleAdded} setCircleAdded={setCircleAdded} />
         </div>
-        <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
+        <div className='absolute top-8 right-8 z-[1000] flex flex-col gap-4'>
+          <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
+          <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} setCircleAdded={setCircleAdded} />
+        </div>
       </div>
       {isEditing && (
-        <DensityModal 
-          onSubmit={handleDensitySubmit} 
-        />
+          <DensityModal 
+            setDensity={setDensity}
+            density={density} 
+          />
       )}
     </main>
   );
