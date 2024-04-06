@@ -6,6 +6,7 @@ import clsx from "clsx";
 import dynamic from 'next/dynamic';
 import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
+import GoogleMap from './components/GoogleMap';
 
 const LeafletMap = dynamic(() => import('./components/LeafletMap.jsx'), {
   ssr: false,
@@ -48,7 +49,7 @@ export default function Home() {
     <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
       <div className={clsx('flex-col items-center justify-center w-full')}>
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
-          <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} isEditing={isEditing} circleAdded={circleAdded} setCircleAdded={setCircleAdded} />
+          <GoogleMap isEditing={isEditing} />
         </div>
         <div className='absolute top-8 right-8 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
