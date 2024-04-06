@@ -59,7 +59,7 @@ export default function Home() {
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
           <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} />
         </div>
-        <div className='absolute top-8 right-8 z-[1000] flex flex-col gap-4'>
+        <div className='absolute top-[10px] right-16 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
           <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
         </div>

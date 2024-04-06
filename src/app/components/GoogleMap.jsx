@@ -86,7 +86,7 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
         zoom={13}
         onClick={onMapClick} // Set up the click event listener here
         onLoad={onLoad}
-        onUnmount={onUnmount}
+        onUnmount={onUnmount}        
       >
         {marker && <Marker position={marker} />}
       </GoogleMap>
