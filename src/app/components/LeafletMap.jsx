@@ -1,4 +1,4 @@
-// components/LeafletMap.js
+'use client'
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -33,7 +33,9 @@ const LeafletMap = ({ lat, lng, density }) => {
   
 
 
-  return <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />;
+  return (
+   <div ref={mapRef} style={{ height: '100vh', width: '100%' }} />
+  )
 };
 
 export default LeafletMap;
