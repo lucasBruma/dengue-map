@@ -6,6 +6,7 @@ import clsx from "clsx";
 import dynamic from 'next/dynamic';
 import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
+import GoogleMap from './components/GoogleMap';
 
 const LeafletMap = dynamic(() => import('./components/LeafletMap.jsx'), {
   ssr: false,
@@ -15,7 +16,15 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34, lng: -58});
   const [density, setDensity] = useState('red');
   const [isEditing, setIsEditing] = useState(false);
-  const [circleAdded, setCircleAdded] = useState(false);
+  const [marker, setMarker] = React.useState(null);
+
+
+  const handleSubmitReport = (e) => {
+    e.preventDefault();
+    if (!marker) return;
+    console.log(`Enviando coordenadas: lat ${marker.lat}, lng ${marker.lng}. e intensidad: ${density}`)
+    // enviar data de los puntos y del circulo a la api
+};
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -48,11 +57,11 @@ export default function Home() {
     <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
       <div className={clsx('flex-col items-center justify-center w-full')}>
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
-          <LeafletMap lat={userLocation.lat} lng={userLocation.lng} density={density} isEditing={isEditing} circleAdded={circleAdded} setCircleAdded={setCircleAdded} />
+          <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} />
         </div>
-        <div className='absolute top-8 right-8 z-[1000] flex flex-col gap-4'>
+        <div className='absolute top-[10px] right-16 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
-          <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} setCircleAdded={setCircleAdded} />
+          <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
         </div>
       </div>
       {isEditing && (

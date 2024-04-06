@@ -1,6 +1,16 @@
 
 const result = [
     {
+        "lat": -34.57295024200886,
+        "long": -58.46709644148949,
+        "intensity": 1
+    },
+    {
+        "lat": -34.323232323,
+        "long": -58.2132313,
+        "intensity": 0,
+    },
+    {
         "lat": -34.323232323,
         "long": -58.2132313,
         "intensity": 0,
@@ -30,7 +40,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export class ApiClient {
   // necesito puntos izq-top, der-top, izq-bottom, der-bottom
-  async getPointsInAnSquare({ leftTop, rightTop, leftBottom, rightBottom }) {
+  async getPointsInAnSquare() {
     // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
     await delay(500);
     return { success: true, value: result };
