@@ -1,28 +1,19 @@
 ## WELCOME TO DENGUE MAP!
 DENGUE MAP is a simple and intuitive website that aims to help in the prevention of dengue and other potential diseases.
 
-### How to use it
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
 ## Run it in local
 
+- Setup the .env.local in the root of the project (adding the env vars of the .env.example)
+
+- Install dependencies running
+```bash
+npm install
+```
+
+- Run
+```bash
+npm run dev
+```
 
 ## 
 .
