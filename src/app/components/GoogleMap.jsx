@@ -75,22 +75,13 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
 
   useEffect(() => {
     const pollingCallback = () => {
-        // Your polling logic here
-      console.log('Polling...');
-
-        // Simulating an API failure in the polling callback
-        //   const shouldFail = Math.random() < 0.2; // Simulate 20% chance of API failure
-
-        //   if (shouldFail) {
-        //     setIsPollingEnabled(false);
-        //     console.log('Polling failed. Stopped polling.');
-        //   }
+      getCenterAndRenderCircles();
     };
 
     const startPolling = () => {
       pollingCallback(); // To immediately start fetching data
       // Polling every 30 seconds
-      timerIdRef.current = setInterval(pollingCallback, 30000);
+      timerIdRef.current = setInterval(pollingCallback, 3000);
     };
 
     const stopPolling = () => {
