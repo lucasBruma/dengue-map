@@ -44,12 +44,11 @@ export class ApiClient {
      * @property {number} zoom   
      * @property {number} date - optional if its the first rendering -
      */
-    async getPointsInAnSquare(centerPoint, zoom, date = Date.now() - 86400 * 1000 * 100000000) {
+    async getPointsInAnSquare(centerPoint, zoom, date = Date.now() - 86400 * 1000 * 2103123132) {
         const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
-        const response = await axios.get(`${backUrl}/api/v1/points/distance?long1=${centerPoint.long}&lat=${centerPoint.lat}&distance=${zoom}`);
+        const response = await axios.get(`${backUrl}/api/v1/points/distance?long1=${centerPoint.long}&lat=${centerPoint.lat}&distance=${zoom}&lastUpdate=${date}`);
 
-        console.log("response--", response)
         // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
         return { success: true, value: response.data };
     }
