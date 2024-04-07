@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { Circle, GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { apiClient } from '../services/api';
 import { intensity } from '../constants';
+import { getSizeBasedOnZoom } from '@/utils/getSize';
 
 const containerStyle = {
   width: '100%',
@@ -13,10 +14,10 @@ const centerHardcoded = {
   lng: -58.47473144531251
 };
 
-const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelected, userLocation}) => {
+const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelected, userLocation, circles, setCircles}) => {
   const [map, setMap] = React.useState(null);
   const timerIdRef = useRef(null);
-  const [isPollingEnabled, setIsPollingEnabled] = useState(true);
+  // const [zoom, setZoom] = useState(12)
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -41,96 +42,59 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
   };
 
   useEffect(() => {
-    if (!isLoaded || !map) return;
-
-    async function loadCircles() {
+    const getCenterAndRenderCircles = () => {
+      if (!map) return;
+  
       const newCenter = map.getCenter();
       if (!newCenter) return null;
       const centerLat = newCenter.lat();
       const centerLng = newCenter.lng();
       const currentZoom = map.getZoom();
-
-      const circlesResult = await apiClient.getPointsInAnSquare(
-        {lat: centerLat, long: centerLng},
-        currentZoom
-      );
-
-      for (const circle of circlesResult.value) {
-          new window.google.maps.Circle({
-            strokeColor: intensity[circle.intensity],
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: intensity[circle.intensity],
-            fillOpacity: 0.35,
-            map,
-            center: {lat: circle.latitud, lng: circle.longitud},
-            radius: 100,
-            visible: true,
-          });
+  
+      async function loadCircles() {   
+        const circlesResult = await apiClient.getPointsInAnSquare({
+            lat: centerLat,
+            long: centerLng
+          },
+          currentZoom,
+        )
+        const size = getSizeBasedOnZoom(currentZoom);
+        if (circlesResult.value.length > 0) {
+          setCircles([
+            ...circles.map(x => ({
+              long: x.long,
+              lat: x.lat,
+              intensity: x.intensity,
+              size: size
+            })),
+            ...circlesResult.value.map(x => ({
+              long: x.longitud,
+              lat: x.latitud,
+              intensity: x.intensity,
+              size: size
+           }))
+          ])
         }
+      }
+  
+      loadCircles();
     }
 
-    loadCircles();
-  }, [isLoaded, map]);
-
-  useEffect(() => {
     const pollingCallback = () => {
       getCenterAndRenderCircles();
     };
 
     const startPolling = () => {
-      pollingCallback(); // To immediately start fetching data
-      // Polling every 30 seconds
-      timerIdRef.current = setInterval(pollingCallback, 3000);
+      pollingCallback();
+      timerIdRef.current = setInterval(pollingCallback, 10000);
     };
-
-    const stopPolling = () => {
-      clearInterval(timerIdRef.current); //
-    };
-
-    if (isPollingEnabled && map) {
-      startPolling();
-    } else {
-      stopPolling();
-    }
+    startPolling();
+    
 
     return () => {
-      stopPolling();
     };
-  }, [isPollingEnabled, map]);
+  }, [map]);
 
-  const getCenterAndRenderCircles = () => {
-    if (!map) return;
-
-    const newCenter = map.getCenter();
-    const centerLat = newCenter.lat();
-    const centerLng = newCenter.lng();
-    const currentZoom = map.getZoom();
-
-    async function loadCircles() {
-      const circlesResult = await apiClient.getPointsInAnSquare({
-          lat: centerLat,
-          long: centerLng
-        },
-        currentZoom,
-        Date.now()
-      )
-      for (const circle of circlesResult.value) {
-          const circleRendered = new window.google.maps.Circle({
-            strokeColor: intensity[circle.intensity],
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: intensity[circle.intensity],
-            fillOpacity: 0.35,
-            map,
-            center: {lat: circle.latitud, lng: circle.longitud},
-            radius: 100,
-          });
-        }
-    }
-
-    loadCircles();
-  }
 
   const getCenterLocation = () => {
     if (!map) return null;
@@ -142,7 +106,7 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
     return { lat: centerLat, lng: centerLng}
   }
 
-  const handleDrag = () => { // pasarle a la query el punto del medio y la distancia del zoom (a revisar)
+  const handleDrag = () => {
     console.log('The user is dragging the map.');
     // getCenterAndRenderCircles();
   };
@@ -154,7 +118,14 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
 
   const handleZoomChanged = () => {
     console.log('The user has changed the zoom.');
-    // getCenterAndRenderCircles();
+    if (!map) return;
+    const currentZoom = map.getZoom();
+    setCircles(circles.map(x => ({
+      long: x.long,
+      lat: x.lat,
+      intensity: x.intensity,
+      size: getSizeBasedOnZoom(currentZoom)
+    }) ))
   };
 
   return isLoaded ? (
@@ -162,7 +133,7 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
         mapContainerStyle={containerStyle}
         center={centerOptionSelected ? userLocation : getCenterLocation() ?? centerHardcoded}
         zoom={13}
-        onClick={onMapClick} // Set up the click event listener here
+        onClick={onMapClick}
         onLoad={onLoad}
         onUnmount={onUnmount}
         onDrag={handleDrag} 
@@ -170,7 +141,25 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
         onZoomChanged={handleZoomChanged}            
       >
         {marker && <Marker position={marker} />}
-      </GoogleMap>
+        {
+          circles && circles.length > 0 ? 
+            circles.map((x, i) => (
+              <Circle 
+                key={`${i}${x.lat}${x.long}`} 
+                center={{lat: x.lat, lng: x.long}} 
+                options={{
+                  strokeColor: intensity[x.intensity],
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: intensity[x.intensity],
+                  fillOpacity: 0.10
+                }} 
+                radius={x.size}
+              />
+            ))
+            : null
+        }
+        </GoogleMap>
   ) : <></>;
 };
 

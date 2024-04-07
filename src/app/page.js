@@ -15,11 +15,14 @@ export default function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const [marker, setMarker] = React.useState(null);
   const [centerOptionSelected, setCenterOptionSelected] = React.useState(false);
+  const [circles, setCircles] = useState([]);
 
   const handleSubmitReport = async (e) => {
     e.preventDefault();
     if (!marker) return;
     await apiClient.saveReport({ lat: marker.lat, long: marker.lng, intensityLevel: density})
+    const size = circles[0]?.size ? circles[0]?.size : 12;
+    setCircles[[...circles, { lat: marker.lat, long: marker.lng, intensity: density, size: size}]]
   };
 
   useEffect(() => {
@@ -53,12 +56,13 @@ export default function Home() {
     <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
       <div className={clsx('flex-col items-center justify-center w-full')}>
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
-          <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} centerOptionSelected={centerOptionSelected} userLocation={userLocation} />
+          <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} centerOptionSelected={centerOptionSelected} userLocation={userLocation}
+          circles={circles} setCircles={setCircles} />
         </div>
         <div className='absolute top-[10px] right-2 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
           <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
-          <CenterUserButton setCenterOptionSelected={setCenterOptionSelected} centerOptionSelected={centerOptionSelected} />
+          {/* <CenterUserButton setCenterOptionSelected={setCenterOptionSelected} centerOptionSelected={centerOptionSelected} /> */}
         </div>
       </div>
       {isEditing && (
