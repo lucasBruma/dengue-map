@@ -19,7 +19,7 @@ export default function Home() {
   const handleSubmitReport = async (e) => {
     e.preventDefault();
     if (!marker) return;
-    await apiClient.saveReport({ lat: marker.lat, long: marker.long, intensityLevel: density})
+    await apiClient.saveReport({ lat: marker.lat, long: marker.lng, intensityLevel: density})
   };
 
   useEffect(() => {
