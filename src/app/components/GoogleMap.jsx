@@ -60,7 +60,12 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     if (!isLoaded || !map) return;
 
     async function loadCircles() {
-        const circlesResult = await apiClient.getPointsInAnSquare()
+      const newCenter = map.getCenter();
+      const centerLat = newCenter.lat();
+      const centerLng = newCenter.lng();
+      const currentZoom = map.getZoom();
+
+        const circlesResult = await apiClient.getPointsInAnSquare({centerPoint: {lat: centerLat, long: centerLng}, zoom: currentZoom, date: Date.now()});
         for (const circle of circlesResult.value) {
             const circleRendered = new window.google.maps.Circle({
               strokeColor: "#FF0000",
@@ -118,9 +123,11 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     if (!map) return;
 
     const newCenter = map.getCenter();
+    const centerLat = newCenter.lat();
+    const centerLng = newCenter.lng();
 
     async function loadCircles() {
-        const circlesResult = await apiClient.getPointsInAnSquare() // pasar el newCenter
+        const circlesResult = await apiClient.getPointsInAnSquare({centerPoint: {lat: centerLat, long: centerLng}, zoom: currentZoom})
         for (const circle of circlesResult.value) {
             const circleRendered = new window.google.maps.Circle({
               strokeColor: "#FF0000",
@@ -165,7 +172,7 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
         onUnmount={onUnmount}
         onDrag={handleDrag} 
         onDragEnd={handleDragEnd}
-        onZoomChanged={handleZoomChanged}       
+        onZoomChanged={handleZoomChanged}            
       >
         {marker && <Marker position={marker} />}
       </GoogleMap>
