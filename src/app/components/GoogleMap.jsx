@@ -94,7 +94,7 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     };
 
     const stopPolling = () => {
-      clearInterval(timerIdRef.current);
+      clearInterval(timerIdRef.current); //
     };
 
     if (isPollingEnabled && map) {
