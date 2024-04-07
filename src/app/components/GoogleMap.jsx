@@ -8,12 +8,12 @@ const containerStyle = {
   height: '100vh'
 };
 
-const center = {
+const centerHardcoded = {
   lat: -34.617387052407175,
   lng: -58.47473144531251
 };
 
-const MapComponent = ({isEditing, density, marker, setMarker}) => {
+const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelected, userLocation}) => {
   const [map, setMap] = React.useState(null);
   const timerIdRef = useRef(null);
   const [isPollingEnabled, setIsPollingEnabled] = useState(true);
@@ -24,7 +24,6 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
   });
 
   const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
     setMap(map)
   }, [])
 
@@ -46,6 +45,7 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
 
     async function loadCircles() {
       const newCenter = map.getCenter();
+      if (!newCenter) return null;
       const centerLat = newCenter.lat();
       const centerLng = newCenter.lng();
       const currentZoom = map.getZoom();
@@ -132,6 +132,15 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     loadCircles();
   }
 
+  const getCenterLocation = () => {
+    if (!map) return null;
+    const newCenter = map.getCenter() ?? null;
+    if (!newCenter) return null;
+    const centerLat = newCenter.lat() ?? null;
+    const centerLng = newCenter.lng() ?? null;
+    if (!centerLat || !centerLng) return null;
+    return { lat: centerLat, lng: centerLng}
+  }
 
   const handleDrag = () => { // pasarle a la query el punto del medio y la distancia del zoom (a revisar)
     console.log('The user is dragging the map.');
@@ -151,7 +160,7 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
   return isLoaded ? (
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={center}
+        center={centerOptionSelected ? userLocation : getCenterLocation() ?? centerHardcoded}
         zoom={13}
         onClick={onMapClick} // Set up the click event listener here
         onLoad={onLoad}
