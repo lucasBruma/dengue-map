@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-// import LeafletMap from './components/LeafletMap';
 import DensityModal from './components/DensityModal';
 import clsx from "clsx";
 import dynamic from 'next/dynamic';
@@ -8,9 +7,6 @@ import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
 import GoogleMap from './components/GoogleMap';
 
-const LeafletMap = dynamic(() => import('./components/LeafletMap.jsx'), {
-  ssr: false,
-});
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34, lng: -58});
