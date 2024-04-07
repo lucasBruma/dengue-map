@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const result = [
     {
@@ -39,18 +40,22 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // siempre pasar una fecha apenas abre para que traiga las ultimas 6 horas.
 
 export class ApiClient {
+    // necesito puntos izq-top, der-top, izq-bottom, der-bottom
+    /**
+     * Represents a person.
+     * @property {Object} centerPoint - { lat: number, long: number }.
+     * @property {number} zoom   
+     * @property {number} date - optional if its the first rendering -
+     */
+    async getPointsInAnSquare(centerPoint, zoom, date = Date.now() - 86400 * 1000) {
 
-  // necesito puntos izq-top, der-top, izq-bottom, der-bottom
-  /**
- * Represents a person.
- * @property {Object} centerPoint - { lat: number, long: number }.
- * @property {number} zoom   
- * @property {number} date - optional if its the first rendering -
- */
-  async getPointsInAnSquare(centerPoint, zoom, date = date.now()) {
+    const backUrl = process.env.BACKEND_URL || '';
+
+    const response = await axios.get(`${backUrl}/api/v1/points?long1=${centerPoint.long}&lat=${centerPoint.lat}&distance=${zoom}&lastUpdate=${date}`);
+
     // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
     await delay(500);
-    return { success: true, value: result };
+    return { success: true, value: response.data };
   }
 
   /**
@@ -59,6 +64,14 @@ export class ApiClient {
   */
 
   async saveReport(point) {
+    const backUrl = process.env.BACKEND_URL || '';
+
+    await axios.post(`${backUrl}/api/v1/points`, {
+        latitud: point.lat,
+        longitud: point.long,
+        createdAt: Date.now(),
+        intensityLevel: point.intensityLevel
+    });
     // console.log('saveReport: ', lat, lng, density);
     await delay(500);
     return { success: true };
