@@ -93,7 +93,7 @@ const MapComponent = ({isEditing, density, marker, setMarker, centerOptionSelect
 
     return () => {
     };
-  }, [map]);
+  }, [map]); //
 
 
   const getCenterLocation = () => {
