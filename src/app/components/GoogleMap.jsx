@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { apiClient } from '../services/api';
+import { intensity } from '../constants';
 
 const containerStyle = {
   width: '100%',
@@ -14,19 +15,19 @@ const center = {
 
 const radius = 100;
 
-const circleOptions = {
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35,
-    clickable: false,
-    draggable: false,
-    editable: false,
-    visible: true,
-    radius, // in meters
-    zIndex: 1
-};
+// const circleOptions = {
+//     strokeColor: '#FF0000',
+//     strokeOpacity: 0.8,
+//     strokeWeight: 2,
+//     fillColor: '#FF0000',
+//     fillOpacity: 0.35,
+//     clickable: false,
+//     draggable: false,
+//     editable: false,
+//     visible: true,
+//     radius, // in meters
+//     zIndex: 1
+// };
 
 const MapComponent = ({isEditing, density, marker, setMarker}) => {
   const [map, setMap] = React.useState(null);
@@ -69,24 +70,23 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
         {lat: centerLat, long: centerLng},
         currentZoom
       );
-
+        console.log("circleResult: ", circlesResult.value)
       for (const circle of circlesResult.value) {
           const circleRendered = new window.google.maps.Circle({
-            strokeColor: "#FF0000",
+            strokeColor: intensity[circle.intensity],
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: "#FF0000",
+            fillColor: intensity[circle.intensity],
             fillOpacity: 0.35,
             map,
             center: {lat: circle.lat, lng: circle.long},
-            radius: 100,
-            ...circleOptions
+            radius: 400,
           });
         }
     }
 
     loadCircles();
-  }, [isLoaded, map, circleOptions]);
+  }, [isLoaded, map]);
 
   useEffect(() => {
     const pollingCallback = () => {
@@ -141,15 +141,14 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
       )
       for (const circle of circlesResult.value) {
           const circleRendered = new window.google.maps.Circle({
-            strokeColor: "#FF0000",
+            strokeColor: intensity[circle.intensity],
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: "#FF0000",
+            fillColor: intensity[circle.intensity],
             fillOpacity: 0.35,
             map,
             center: {lat: circle.lat, lng: circle.long},
             radius: 100,
-            ...circleOptions
           });
         }
     }
@@ -160,17 +159,17 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
 
   const handleDrag = () => { // pasarle a la query el punto del medio y la distancia del zoom (a revisar)
     console.log('The user is dragging the map.');
-    getCenterAndRenderCircles();
+    // getCenterAndRenderCircles();
   };
 
   const handleDragEnd = () => {
     console.log('The user stopped dragging the map.');
-    getCenterAndRenderCircles();
+    // getCenterAndRenderCircles();
   };
 
   const handleZoomChanged = () => {
     console.log('The user has changed the zoom.');
-    getCenterAndRenderCircles();
+    // getCenterAndRenderCircles();
   };
 
   return isLoaded ? (
