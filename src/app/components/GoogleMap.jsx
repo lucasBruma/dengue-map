@@ -65,20 +65,24 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
       const centerLng = newCenter.lng();
       const currentZoom = map.getZoom();
 
-        const circlesResult = await apiClient.getPointsInAnSquare({centerPoint: {lat: centerLat, long: centerLng}, zoom: currentZoom, date: Date.now()});
-        for (const circle of circlesResult.value) {
-            const circleRendered = new window.google.maps.Circle({
-              strokeColor: "#FF0000",
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              fillColor: "#FF0000",
-              fillOpacity: 0.35,
-              map,
-              center: {lat: circle.lat, lng: circle.long},
-              radius: 100,
-              ...circleOptions
-            });
-          }
+      const circlesResult = await apiClient.getPointsInAnSquare(
+        {lat: centerLat, long: centerLng},
+        currentZoom
+      );
+
+      for (const circle of circlesResult.value) {
+          const circleRendered = new window.google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map,
+            center: {lat: circle.lat, lng: circle.long},
+            radius: 100,
+            ...circleOptions
+          });
+        }
     }
 
     loadCircles();
@@ -125,22 +129,29 @@ const MapComponent = ({isEditing, density, marker, setMarker}) => {
     const newCenter = map.getCenter();
     const centerLat = newCenter.lat();
     const centerLng = newCenter.lng();
+    const currentZoom = map.getZoom();
 
     async function loadCircles() {
-        const circlesResult = await apiClient.getPointsInAnSquare({centerPoint: {lat: centerLat, long: centerLng}, zoom: currentZoom})
-        for (const circle of circlesResult.value) {
-            const circleRendered = new window.google.maps.Circle({
-              strokeColor: "#FF0000",
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              fillColor: "#FF0000",
-              fillOpacity: 0.35,
-              map,
-              center: {lat: circle.lat, lng: circle.long},
-              radius: 100,
-              ...circleOptions
-            });
-          }
+      const circlesResult = await apiClient.getPointsInAnSquare({
+          lat: centerLat,
+          long: centerLng
+        },
+        currentZoom,
+        Date.now()
+      )
+      for (const circle of circlesResult.value) {
+          const circleRendered = new window.google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map,
+            center: {lat: circle.lat, lng: circle.long},
+            radius: 100,
+            ...circleOptions
+          });
+        }
     }
 
     loadCircles();

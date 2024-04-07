@@ -48,15 +48,13 @@ export class ApiClient {
      * @property {number} date - optional if its the first rendering -
      */
     async getPointsInAnSquare(centerPoint, zoom, date = Date.now() - 86400 * 1000) {
+        const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
-    const backUrl = process.env.BACKEND_URL || '';
+        const response = await axios.get(`${backUrl}/api/v1/points/distance?long1=${centerPoint.long}&lat=${centerPoint.lat}&distance=${zoom}&lastUpdate=${date}`);
 
-    const response = await axios.get(`${backUrl}/api/v1/points?long1=${centerPoint.long}&lat=${centerPoint.lat}&distance=${zoom}&lastUpdate=${date}`);
-
-    // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
-    await delay(500);
-    return { success: true, value: response.data };
-  }
+        // console.log('getPointsInAnSquare: ', { leftTop, rightTop, leftBottom, rightBottom });
+        return { success: true, value: response.data };
+    }
 
   /**
   * Represents a person.
@@ -64,7 +62,7 @@ export class ApiClient {
   */
 
   async saveReport(point) {
-    const backUrl = process.env.BACKEND_URL || '';
+    const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
 
     await axios.post(`${backUrl}/api/v1/points`, {
         latitud: point.lat,
@@ -73,7 +71,6 @@ export class ApiClient {
         intensityLevel: point.intensityLevel
     });
     // console.log('saveReport: ', lat, lng, density);
-    await delay(500);
     return { success: true };
   }
 

@@ -6,21 +6,21 @@ import dynamic from 'next/dynamic';
 import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
 import GoogleMap from './components/GoogleMap';
+import { apiClient } from './services/api';
 
 
 export default function Home() {
   const [userLocation, setUserLocation] = useState({ lat: -34, lng: -58});
-  const [density, setDensity] = useState('red');
+  const [density, setDensity] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [marker, setMarker] = React.useState(null);
 
 
-  const handleSubmitReport = (e) => {
+  const handleSubmitReport = async (e) => {
     e.preventDefault();
     if (!marker) return;
-    console.log(`Enviando coordenadas: lat ${marker.lat}, lng ${marker.lng}. e intensidad: ${density}`)
-    // enviar data de los puntos y del circulo a la api
-};
+    await apiClient.saveReport({ lat: marker.lat, long: marker.long, intensityLevel: density})
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
