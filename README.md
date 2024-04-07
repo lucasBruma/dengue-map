@@ -1,5 +1,5 @@
-## WELCOME TO DENGUE MAP!
-DENGUE MAP is a simple and intuitive website that aims to help in the prevention of dengue and other potential diseases.
+## WELCOME TO DONDE-ESTAN-LOS-MOSQUITOS APP!
+DONDE-ESTAN-LOS-MOSQUITOS is a simple and intuitive website that aims to help in the prevention of dengue and other potential diseases.
 
 ## Run it in local
 
