@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import DensityModal from './components/DensityModal';
 import clsx from "clsx";
-import dynamic from 'next/dynamic';
 import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
 import GoogleMap from './components/GoogleMap';
@@ -11,11 +10,11 @@ import CenterUserButton from './components/CenterUserButton';
 
 
 export default function Home() {
-  const [userLocation, setUserLocation] = useState({ lat: -34, lng: -58});
+  const [userLocation, setUserLocation] = useState(null);
   const [density, setDensity] = useState(2);
   const [isEditing, setIsEditing] = useState(false);
   const [marker, setMarker] = React.useState(null);
-
+  const [centerOptionSelected, setCenterOptionSelected] = React.useState(false);
 
   const handleSubmitReport = async (e) => {
     e.preventDefault();
@@ -54,12 +53,12 @@ export default function Home() {
     <main className={clsx('relative flex min-h-screen flex-col items-center justify-center')}>
       <div className={clsx('flex-col items-center justify-center w-full')}>
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
-          <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} />
+          <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} centerOptionSelected={centerOptionSelected} userLocation={userLocation} />
         </div>
         <div className='absolute top-[10px] right-2 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
           <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
-          {/* <CenterUserButton /> */}
+          <CenterUserButton setCenterOptionSelected={setCenterOptionSelected} centerOptionSelected={centerOptionSelected} />
         </div>
       </div>
       {isEditing && (

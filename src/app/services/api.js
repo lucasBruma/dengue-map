@@ -35,12 +35,9 @@ const result = [
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// intensity 0 = amarillo, 1 = naranja, 2 = rojo
-
-// siempre pasar una fecha apenas abre para que traiga las ultimas 6 horas.
+// intensity 0 = yellow, 1 = orange , 2 = red
 
 export class ApiClient {
-    // necesito puntos izq-top, der-top, izq-bottom, der-bottom
     /**
      * Represents a person.
      * @property {Object} centerPoint - { lat: number, long: number }.
