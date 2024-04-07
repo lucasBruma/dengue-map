@@ -7,7 +7,7 @@ const EditButton = ({ isEditing, setIsEditing }) => {
     <button className={clsx('bg-white text-white p-4 rounded-sm w-full', {
         '!bg-red-400': isEditing, 
         '!bg-green-500': !isEditing
-    })} type='button' onClick={()=>setIsEditing(!isEditing)}>{isEditing ? "Editando" : "Editar"}</button>
+    })} type='button' onClick={()=>setIsEditing(!isEditing)}>{isEditing ? "Dejar de editar" : "Editar"}</button>
   );
 };
 
