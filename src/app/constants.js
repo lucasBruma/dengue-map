@@ -1,1 +1,1 @@
-export const intensity = ["ff0000", "#ffa500", "00ff00"]
+export const intensity = ["yellow", "orange", "red"]
