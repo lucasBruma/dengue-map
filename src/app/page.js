@@ -7,6 +7,7 @@ import EditButton from "./components/EditButton";
 import SubmitReportButton from './components/SubmitReportButton';
 import GoogleMap from './components/GoogleMap';
 import { apiClient } from './services/api';
+import CenterUserButton from './components/CenterUserButton';
 
 
 export default function Home() {
@@ -55,9 +56,10 @@ export default function Home() {
         <div className="z-10 w-full items-center justify-center font-mono text-sm lg:flex">
           <GoogleMap isEditing={isEditing} density={density} marker={marker} setMarker={setMarker} />
         </div>
-        <div className='absolute top-[10px] right-16 z-[1000] flex flex-col gap-4'>
+        <div className='absolute top-[10px] right-2 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
           <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
+          {/* <CenterUserButton /> */}
         </div>
       </div>
       {isEditing && (
