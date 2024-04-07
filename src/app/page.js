@@ -62,7 +62,7 @@ export default function Home() {
         <div className='absolute top-[10px] right-2 z-[1000] flex flex-col gap-4'>
           <EditButton isEditing={isEditing} setIsEditing={setIsEditing} />
           <SubmitReportButton isEditing={isEditing} setIsEditing={setIsEditing} handleSubmitReport={handleSubmitReport} />
-          <CenterUserButton setCenterOptionSelected={setCenterOptionSelected} centerOptionSelected={centerOptionSelected} />
+          {/* <CenterUserButton setCenterOptionSelected={setCenterOptionSelected} centerOptionSelected={centerOptionSelected} /> */}
         </div>
       </div>
       {isEditing && (
